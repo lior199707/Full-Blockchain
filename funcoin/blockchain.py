@@ -81,10 +81,6 @@ class Blockchain(object):
         block_string = json.dumps(block, sort_keys=True).encode()
         return sha256(block_string).hexdigest()
 
-    @staticmethod
-    def valid_block(block):
-        return block["hash"].startswith("0000")
-
     @property
     def last_block(self):
         """
@@ -94,21 +90,76 @@ class Blockchain(object):
         """
         return self.chain[-1] if self.chain else None
 
-    def new_transaction(self, sender, recipient, amount):
-        # Adds a new transaction to the list of pending transactions
-        self.pending_transactions.append({"recipient": recipient, "sender": sender, "amount": amount})
+    def valid_block(self, block:dict):
+        """
+        checks if a block is valid
 
-    def proof_of_work(self):
-        # mining algorithm that generates new blocks adn add hem to the chain
-        # generate blocks until a valid one is found(starts with 4 zeroes)
+        :param block: the block to check if valid.
+        :return: True id the block is valid, false otherwise.
+        """
+        # Check if a block's hash is less that the target
+        return block["hash"] < self.target
+
+    def add_block(self, block:dict):
+        """
+        gets a clock and add it to the chain
+
+        :param block: dictionary, the block to add
+        """
+        # TODO: Add proper validation logic here!
+        self.chain.append(block)
+
+    def recalculate_target(self, block_index):
+        """
+
+        :return: the number we need to get below to mine a new block
+        """
+        # Check if we need to recalculate the target
+        if block_index % 10 == 0:
+            # Expected time span of 10 blocks
+            expected_timespan = 10 * 10
+
+            # Calculate the actual time span
+            actual_timespan = self.chain[-1]["timestamp"] - self.chain[-10]["timestamp"]
+
+            # Figure out what the offset is
+            ratio = actual_timespan / expected_timespan
+
+            # Now let's adjust the ratio to not be too extreme( between 0.25 to 4)
+            ratio = max(0.25, ratio)
+            ratio = min(4.00, ratio)
+
+            # Calculate the new target by multiplying the current one by the ratio
+            new_target = int(self.target, 16) * ratio
+            self.target = format(math.floor(new_target), "x").zfill(64)
+            logger.info(f"Calculated new mining target: {self.target}")
+            return self.target
+
+    async def get_blocks_after_timestamp(self, timestamp:float):
+        """
+
+        :param timestamp: float value representing the timestamp
+        :return: a list of all the blocks whose timestamps are bigger than the timestamp received.
+        """
+        for index, block in enumerate(self.chain):
+            if timestamp < block["timestamp"]:
+                return self.chain[index:]
+
+    async def mine_new_block(self):
+        """
+        proof of work algorithm, try to mine a block until a valid one is found
+        than adds it to the chain.
+        """
+        self.recalculate_target(self.last_block["index"] + 1)
         while True:
             new_block = self.new_block()
             if self.valid_block(new_block):
                 break
-        # add the valid block to the chain
+            await asyncio.sleep(0)
         self.chain.append(new_block)
-        print("Found a new block: ", new_block)
+        logger.info("Found a new block:", new_block)
 
+    def new_transaction(self, sender, recipient, amount):
+        # Adds a new transaction to the list of pending transactions
+        self.pending_transactions.append({"recipient": recipient, "sender": sender, "amount": amount})
 
-    def valid_hash(self):
-        pass
