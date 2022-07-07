@@ -36,7 +36,7 @@ class P2PError(Exception):
 
 class P2PProtocol:
     """
-    class P2PProtocol handles communication on the server, responsible for sending messages on the server.
+    class P2PProtocol handles communication on the server, responsible for handling messages on the server.
     """
     def __init__(self, server: funcoin.server.Server):
         self.server = server
@@ -75,7 +75,7 @@ class P2PProtocol:
 
     async def handle_ping(self, message, writer):
         """
-
+        handles incoming "ping" message
 
         :param message: message object
         :param writer: asyncio.StreamWriter object, the user
