@@ -1,8 +1,14 @@
+import asyncio
 import json
-
-from datetime import datetime
-from hashlib import sha256
+import math
 import random
+from hashlib import sha256
+from time import time
+import structlog
+
+import funcoin.blockchain
+
+logger = structlog.getLogger("blockchain")
 
 
 class Blockchain(object):
