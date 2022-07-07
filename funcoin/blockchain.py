@@ -31,7 +31,7 @@ class Blockchain(object):
         """
         # Generates a new block
         block = self.create_block(
-            index=len(self.chain),
+            height=len(self.chain),
             transactions=self.pending_transactions,
             previous_hash=self.last_block['hash'] if self.last_block else None,
             nonce=format(random.getrandbits(64), "x"),
@@ -43,12 +43,12 @@ class Blockchain(object):
         return block
 
     @staticmethod
-    def create_block(index: int, transactions: list, previous_hash: str, nonce: str, target: str,
+    def create_block(height: int, transactions: list, previous_hash: str, nonce: str, target: str,
                      timestamp: float = None):
         """
         creates a new block.
 
-        :param index: the index of the block
+        :param height: the index of the block
         :param transactions: the transactions stored in the block
         :param previous_hash: the hash of the previous block in the chain
         :param nonce: random 64 bits str in hexadecimal
@@ -57,7 +57,7 @@ class Blockchain(object):
         :param timestamp: float value of the time.
         :return: dictionary representing a block.
         """
-        block = {'index': index,
+        block = {'height': height,
                  'transactions': transactions,
                  'previous_hash': previous_hash,
                  'nonce': nonce,
@@ -150,7 +150,7 @@ class Blockchain(object):
         proof of work algorithm, try to mine a block until a valid one is found
         than adds it to the chain.
         """
-        self.recalculate_target(self.last_block["index"] + 1)
+        self.recalculate_target(self.last_block["height"] + 1)
         while True:
             new_block = self.new_block()
             if self.valid_block(new_block):
