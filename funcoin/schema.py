@@ -1,4 +1,5 @@
 import json
+import funcoin.blockchain
 from time import time
 from marshmallow import Schema, fields, validates_schema, ValidationError
 
@@ -24,7 +25,7 @@ class Block(Schema):
     mined_by = fields.Str(required=False)
     transactions = fields.Nested(Transaction(), many=True)
     height = fields.Int(required=True)
-    target = fields.Str(required=True)
+    difficulty = fields.Int(required=True)
     hash = fields.Str(required=True)
     previous_hash = fields.Str(required=True)
     nonce = fields.Str(required=True)
