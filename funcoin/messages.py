@@ -102,7 +102,20 @@ def meta(ip, port, version="funcoin-0.1"):
 
 
 def create_peers_message(external_ip, external_port, peers):
-    pass
+    """
+    Generates a message containing peer(s).
+
+    :param external_ip: the public IP of the peer
+    :param external_port: the port the peer is listening on
+    :param peers: list containing Peer(s).
+    :return: JSON encoded string of the transaction message.
+    """
+    return BaseSchema().dumps(
+        {
+            "meta": meta(external_ip, external_port),
+            "message": {"name": "peers", "payload": peers},
+        }
+    )
 
 
 def create_block_message(external_ip, external_port, block):
