@@ -18,7 +18,16 @@ class PeerMessage(Schema):
 
 
 class BlockMessage(Schema):
-    pass
+    """
+    Block message schema.
+    """
+    payload = fields.Nested(Block())
+
+    @post_load
+    def add_name(self, data, **kwargs):
+        # indicating it's a peer message for identification.
+        data["name"] = "block"
+        return data
 
 
 class TransactionMessage(Schema):
