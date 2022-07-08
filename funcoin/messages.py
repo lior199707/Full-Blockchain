@@ -44,7 +44,16 @@ class TransactionMessage(Schema):
 
 
 class PingMessage(Schema):
-    pass
+    """
+    Ping message schema.
+    """
+    payload = fields.Nested(Ping())
+
+    @post_load
+    def add_name(self, data, **kwargs):
+        # indicating it's a peer message for identification.
+        data["name"] = "ping"
+        return data
 
 
 class MessageDisambiguation(OneOfSchema):
