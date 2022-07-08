@@ -86,8 +86,19 @@ class BaseSchema(Schema):
     message = fields.Nested(MessageDisambiguation())
 
 
-def meta():
-    pass
+def meta(ip, port, version="funcoin-0.1"):
+    """
+
+    :param ip: the public IP of the peer
+    :param port: the port the peer is listening on
+    :param version: the version
+    :return: dictionary containing 2 keys, "client", "address"
+    address is also a dictionary of 2 keys: "ip", "port".
+    """
+    return {
+        "client": version,
+        "address": {"ip": ip, "port": port},
+    }
 
 
 def create_peers_message(external_ip, external_port, peers):
