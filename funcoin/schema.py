@@ -47,9 +47,8 @@ class Block(Schema):
         # Remove the hash key and its matching value
         block.pop("hash")
 
-        # "dumps" serializes to a string(json)
-        # if it's not the same string
-        if data["hash"] != json.dumps(block, sort_keys=True):
+        # if the hash of the block doesn't match the hash provided.
+        if data["hash"] != funcoin.blockchain.Blockchain.hash(block):
             raise ValidationError("Fraudulent block: hash is wrong")
 
 
