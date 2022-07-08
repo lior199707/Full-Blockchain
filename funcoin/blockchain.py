@@ -6,7 +6,7 @@ from hashlib import sha256
 from time import time
 import structlog
 
-import funcoin.blockchain
+import funcoin
 
 logger = structlog.getLogger("blockchain")
 
