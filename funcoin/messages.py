@@ -1,7 +1,7 @@
 from marshmallow import Schema, fields, post_load
 from marshmallow_oneofschema import OneOfSchema
 
-from funcoin.schema import Peer, Block, Transaction
+from funcoin.schema import Peer, Block, Transaction, Ping
 
 
 class PeerMessage(Schema):
