@@ -156,4 +156,26 @@ def create_transaction_message(external_ip, external_port, tx):
 
 
 def create_ping_message(external_ip, external_port, block_height, peer_count, is_miner):
-    pass
+    """
+    Generates a message containing a ping.
+
+    :param external_ip: the public IP of the peer
+    :param external_port: the port the peer is listening on
+    :param block_height: the index of the block in the chain.
+    :param peer_count: the amount of peers the user have
+    :param is_miner: indicates if a user is a miner.
+    :return: JSON encoded string of the ping message.
+    """
+    return BaseSchema().dumps(
+        {
+            "meta": meta(external_ip, external_port),
+            "message": {
+                "name": "ping",
+                "payload": {
+                    "block_height": block_height,
+                    "peer_count": peer_count,
+                    "is_miner": is_miner,
+                },
+            },
+        }
+    )
