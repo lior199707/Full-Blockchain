@@ -57,7 +57,17 @@ class PingMessage(Schema):
 
 
 class MessageDisambiguation(OneOfSchema):
-    pass
+    type_field = "name"
+    type_schemas = {
+        "ping": PingMessage,
+        "peers": PeerMessage,
+        "block": BlockMessage,
+        "transaction": TransactionMessage,
+    }
+
+    def get_obj_type(self, obj):
+        if isinstance(obj, dict):
+            return obj.get("name")
 
 
 class MetaSchema(Schema):
