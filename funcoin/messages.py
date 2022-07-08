@@ -31,7 +31,16 @@ class BlockMessage(Schema):
 
 
 class TransactionMessage(Schema):
-    pass
+    """
+    Transaction message schema.
+    """
+    payload = fields.Nested(Transaction())
+
+    @post_load
+    def add_name(self, data, **kwargs):
+        # indicating it's a peer message for identification.
+        data["name"] = "transaction"
+        return data
 
 
 class PingMessage(Schema):
