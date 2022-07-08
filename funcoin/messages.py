@@ -119,7 +119,20 @@ def create_peers_message(external_ip, external_port, peers):
 
 
 def create_block_message(external_ip, external_port, block):
-    pass
+    """
+    Generates a message containing a block.
+
+    :param external_ip: the public IP of the peer
+    :param external_port: the port the peer is listening on
+    :param block: block payload,a dictionary.
+    :return: JSON encoded string of the transaction message.
+    """
+    return BaseSchema().dumps(
+        {
+            "meta": meta(external_ip, external_port),
+            "message": {"name": "block", "payload": block},
+        }
+    )
 
 
 def create_transaction_message(external_ip, external_port, tx):
