@@ -79,7 +79,11 @@ class MetaSchema(Schema):
 
 
 class BaseSchema(Schema):
-    pass
+    """
+    Base Schema of a general message.
+    """
+    meta = fields.Nested(MetaSchema())
+    message = fields.Nested(MessageDisambiguation())
 
 
 def meta():
