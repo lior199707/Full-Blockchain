@@ -71,7 +71,11 @@ class MessageDisambiguation(OneOfSchema):
 
 
 class MetaSchema(Schema):
-    pass
+    """
+    Schema of a meta
+    """
+    address = fields.Nested(Peer())
+    client = fields.Str()
 
 
 class BaseSchema(Schema):
