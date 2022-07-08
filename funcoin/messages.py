@@ -5,7 +5,16 @@ from funcoin.schema import Peer, Block, Transaction, Ping
 
 
 class PeerMessage(Schema):
-    pass
+    """
+    Peer message schema.
+    """
+    payload = fields.Nested(Peer(many=True))
+
+    @post_load
+    def add_name(self, data, **kwargs):
+        # indicating it's a peer message for identification.
+        data["name"] = "peers"
+        return data
 
 
 class BlockMessage(Schema):
